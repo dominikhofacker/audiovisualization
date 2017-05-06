@@ -1,0 +1,76 @@
+/*
+ * Audiovisualization using the html canvas element.
+ * Please note: this is an offline-only version. For this version to be used online you need an XMLHttpRequest to load the music file!
+ * ©2017, Dominik Hofacker
+ * https://www.behance.net/dominikhofacker
+ * Please consider supporting this project on behance:
+ * https://www.behance.net/gallery/49260123/Web-Audio-Visualization
+ */
+@keyframes hue {
+  0% {
+    filter: hue-rotate(0deg);
+    -webkit-filter: hue-rotate(0deg);
+  }
+
+  100% {
+    filter: hue-rotate(-360deg);
+    -webkit-filter: hue-rotate(-360deg);
+  }
+}
+#freq {
+    background: linear-gradient(#ff0088, red);
+    position: absolute; 
+    left: 0;
+    right: 0;
+    margin: 0 auto;
+}
+body {
+    background:#000;
+    overflow: hidden;
+}
+#freq.animateHue, body.animateHue {
+    animation-name: hue;
+    animation-duration: 500s;
+    animation-delay: 1s;
+    animation-iteration-count: infinite;
+
+    -webkit-animation-name: hue;
+    -webkit-animation-duration: 500s;
+    -webkit-animation-delay: 1s;
+    -webkit-animation-iteration-count: infinite;
+}
+#title, #artist, #album {
+    position: absolute;
+    text-align: center;
+    width: 100%;
+    top: 100px;
+    z-index: 999;
+    font-weight: 100;
+    font-family: "Roboto", sans-serif;
+    font-size: 100px;
+    color: #fff;
+    visibility: hidden;
+    letter-spacing: -.05em;
+    text-shadow: 0px 0px 8px rgba(0, 0, 0, 0.5);
+}
+#artist {
+    font-size: 40px;
+}
+#album {
+    font-size: 40px;
+}
+
+input {
+    margin-bottom: 10px;
+    display: block;
+    background: none;
+    position: absolute;
+    z-index: 999;
+    
+}
+
+html, body {
+  width:  100%;
+  height: 100%;
+  margin: 0px;
+}
