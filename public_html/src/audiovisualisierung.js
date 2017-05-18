@@ -28,23 +28,14 @@ if (!window.requestAnimationFrame)
 	window.requestAnimationFrame = window.webkitRequestAnimationFrame;
 
 $(function () {
-
-	if (!!(navigator.getUserMedia || navigator.webkitGetUserMedia ||
-            navigator.mozGetUserMedia || navigator.msGetUserMedia)) {
-		
 		//handle different types navigator objects of different browsers
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	            navigator.mozGetUserMedia || navigator.msGetUserMedia;
-
 	    //eigene Init
 	    loader = new BufferLoader();
             //loader.visualize = visualize;
-
             //init canvas
 	    initBinCanvas();	
-	} else {
-	  alert('getUserMedia() is not supported in your browser');
-	}
 });
 
 function handleFiles(files) {
