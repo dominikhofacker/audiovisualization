@@ -25,9 +25,11 @@ https://www.behance.net/gallery/49260123/Web-Audio-Visualization
     </head>
     <body>		   
         <input type="file" id="input" onchange="handleFiles(this.files)"/> 
-        <div id="title">Titel</div>
-        <div id="artist">Artist</div>
-        <div id="album">Album</div>
+        <div id="song_info_wrapper">
+        	<div id="artist">Artist</div>
+			<div id="title">Titel</div>
+			<div id="album">Album</div>
+		</div>
         <canvas id="freq" width="1024" height="525"></canvas>
     </body>
 </html>

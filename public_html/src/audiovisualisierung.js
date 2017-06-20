@@ -28,6 +28,11 @@ if (!window.requestAnimationFrame)
 	window.requestAnimationFrame = window.webkitRequestAnimationFrame;
 
 $(function () {
+		"use strict";
+		var containerHeight = $("#song_info_wrapper").height();
+		var topVal = $(window).height() / 2 - containerHeight / 2; 
+		$("#song_info_wrapper").css("top", topVal);
+		console.log(topVal);
 		//handle different types navigator objects of different browsers
 		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
 	            navigator.mozGetUserMedia || navigator.msGetUserMedia;
@@ -155,6 +160,11 @@ function onWindowResize()
 {
 	ctx.canvas.width  = window.innerWidth;
   	ctx.canvas.height = window.innerHeight;
+	
+	var containerHeight = $("#song_info_wrapper").height();
+	var topVal = $(window).height() / 2 - containerHeight / 2; 
+	$("#song_info_wrapper").css("top", topVal);
+	console.log(topVal);
 }
 
 var audioBuffer;
@@ -220,8 +230,7 @@ function drawBars (array) {
         
         var bass = Math.floor(array[1]); //1Hz Frequenz 
         var radius = -(bass * 0.25 + 450);
-        
-        
+		       
 	//go over each bin
 	for ( var i = 0; i < maxBinCount; i++ ){
 
@@ -318,11 +327,4 @@ function drawBars (array) {
 //    ctx.restore();
 //}
 
-$(document).ready(function(){
-    //$("#freq").css("margin-top", window.innerHeight - 325);
-    $('#title').css('top', c.height / 2 - 25 + 'px');
-    $('#artist').css('top', c.height / 2 - 90 + 'px');
-    $('#album').css('top', c.height / 2 + 100 + 'px');
-    
-});
 
