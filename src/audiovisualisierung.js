@@ -190,7 +190,7 @@ function playSample() {
 // progress on transfers from the server to the client (downloads)
 function updateProgress (oEvent) {
   if (oEvent.lengthComputable) {
-	$("button, input").disable(true);
+	$("button, input").prop("disabled",true);
     var percentComplete = oEvent.loaded / oEvent.total;
 	console.log("Loading music file... " + Math.floor(percentComplete * 100) + "%");
 	$("#loading").html("Loading... " + Math.floor(percentComplete * 100) + "%");
@@ -203,7 +203,7 @@ function updateProgress (oEvent) {
 function transferComplete(evt) {
   	console.log("The transfer is complete.");
 	$("#loading").html("");
-	$("button, input").disable(false);
+	$("button, input").prop("disabled",false);
 }
 
 function transferFailed(evt) {
