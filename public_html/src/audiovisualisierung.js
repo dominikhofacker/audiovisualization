@@ -1,6 +1,5 @@
 /*
  * Audiovisualization using the html canvas element.
- * Please note: this is an offline-only version. For this version to be used online you need an XMLHttpRequest to load the music file!
  * ©2017, Dominik Hofacker
  * https://www.behance.net/dominikhofacker
  * Please consider supporting this project on behance:
@@ -17,6 +16,7 @@ var ctxDraw = null;
 
 var loader;
 var filename;
+var fileChosen = false;
 
 //handle different prefix of the audio context
 var AudioContext = AudioContext || webkitAudioContext;
@@ -47,17 +47,22 @@ function handleFiles(files) {
     if(files.length === 0){
         return;
     }
+	fileChosen = true;
     setupAudioNodes();
-    loader.load("audio", files[0],function() {
+	var fileReader  = new FileReader();
+    fileReader.onload = function(){
+         var arrayBuffer = this.result;
+         console.log(arrayBuffer);
+         console.log(arrayBuffer.byteLength);
+		
+		 filename = files[0].name.toString();
+		filename = filename.slice(0, -4);
+		console.log(filename);
 
-                filename = files[0].name.toString();
-                filename = filename.slice(0, -4);
-                console.log(filename);
-                
-                var url = files[0].urn || files[0].name;
-                ID3.loadTags(url, function() {
-                    var tags = ID3.getAllTags(url);
-                    
+		var url = files[0].urn || files[0].name;
+		ID3.loadTags(url, function() {
+			var tags = ID3.getAllTags(url);
+
 //                    console.log(tags.title.toString().length);
 //                    if (tags.title.length > 14) {
 //                        var newTitle = tags.title.substring(0,14);
@@ -67,56 +72,110 @@ function handleFiles(files) {
 //                    else {
 //                        $("#title").html(tags.title);
 //                    }
-                    if (tags.title.length > 14) {
-                        var finalTitle;
-                        var checkTitle = tags.title.toLowerCase();
-                        var cutIndex = checkTitle.indexOf("feat.");
-                        //console.log(tags.title.toLowerCase());
-                        var cutIndex2 = checkTitle.indexOf("(");
-                        //console.log(cutIndex2);
+			if (tags.title.length > 14) {
+				var finalTitle;
+				var checkTitle = tags.title.toLowerCase();
+				var cutIndex = checkTitle.indexOf("feat.");
+				//console.log(tags.title.toLowerCase());
+				var cutIndex2 = checkTitle.indexOf("(");
+				//console.log(cutIndex2);
 
-                        var enthaeltFeat = cutIndex !== -1;
-                        var enthaeltKlammer = cutIndex2 !== -1;
-                        
-                        //console.log(enthaeltKlammer);
+				var enthaeltFeat = cutIndex !== -1;
+				var enthaeltKlammer = cutIndex2 !== -1;
 
-                        if (enthaeltFeat && !enthaeltKlammer) {
-                            finalTitle = tags.title.substring(0, cutIndex);
-                        }
-                        else if (enthaeltKlammer && !enthaeltFeat) {
-                            finalTitle = tags.title.substring(0, cutIndex2);
-                        }
-                        else if (enthaeltFeat && enthaeltKlammer && cutIndex < cutIndex2) {
-                            finalTitle = tags.title.substring(0, cutIndex);
-                        }
-                        else if (enthaeltFeat && enthaeltKlammer && cutIndex2 < cutIndex) {
-                            finalTitle = tags.title.substring(0, cutIndex2);
-                        }
-                        else { //!Klammer !Feat
-                            var newTitle = tags.title.substring(0,14);
-                            newTitle += "...";
-                            finalTitle = newTitle;
-                        }
-                        
-                        $("#title").html(finalTitle);
-                    }
-                    else {
-                        $("#title").html(tags.title);
-                    }
+				//console.log(enthaeltKlammer);
 
-                    $("#title").css("visibility", "visible");
-                    
-                    $("#artist").html(tags.artist);
-                    $("#artist").css("visibility", "visible");
-                    $("#album").html(tags.album);
-                    $("#album").css("visibility", "visible");
-                  }, {
-                    tags: ["title","artist","album","picture"],
-                    dataReader: ID3.FileAPIReader(files[0])
-                  });
-                
-                // decode the data
-		context.decodeAudioData(reader.result, function(buffer) {
+				if (enthaeltFeat && !enthaeltKlammer) {
+					finalTitle = tags.title.substring(0, cutIndex);
+				}
+				else if (enthaeltKlammer && !enthaeltFeat) {
+					finalTitle = tags.title.substring(0, cutIndex2);
+				}
+				else if (enthaeltFeat && enthaeltKlammer && cutIndex < cutIndex2) {
+					finalTitle = tags.title.substring(0, cutIndex);
+				}
+				else if (enthaeltFeat && enthaeltKlammer && cutIndex2 < cutIndex) {
+					finalTitle = tags.title.substring(0, cutIndex2);
+				}
+				else { //!Klammer !Feat
+					var newTitle = tags.title.substring(0,14);
+					newTitle += "...";
+					finalTitle = newTitle;
+				}
+
+				$("#title").html(finalTitle);
+			}
+			else {
+				$("#title").html(tags.title);
+			}
+
+			$("#title").css("visibility", "visible");
+
+			$("#artist").html(tags.artist);
+			$("#artist").css("visibility", "visible");
+			$("#album").html(tags.album);
+			$("#album").css("visibility", "visible");
+		  }, {
+			tags: ["title","artist","album","picture"],
+			dataReader: ID3.FileAPIReader(files[0])
+		  });
+		
+     };
+     fileReader.readAsArrayBuffer(files[0]);
+     var url = URL.createObjectURL(files[0]); 
+	
+	var request = new XMLHttpRequest();
+	
+	request.addEventListener("progress", updateProgress);
+	request.addEventListener("load", transferComplete);
+	request.addEventListener("error", transferFailed);
+	request.addEventListener("abort", transferCanceled);
+	
+	request.open('GET', url, true);
+	request.responseType = 'arraybuffer';
+
+ 	// When loaded decode the data
+	request.onload = function() {
+		// decode the data
+		context.decodeAudioData(request.response, function(buffer) {
+		// when the audio is decoded play the sound
+		sourceNode.buffer = buffer;
+		sourceNode.start(0);
+		$("#freq, body").addClass("animateHue");
+		//on error
+		}, function(e) {
+			console.log(e);
+		});
+	};
+	request.send();
+	
+}
+
+function playSample() {
+	
+	fileChosen = true;
+    setupAudioNodes();
+	
+	var request = new XMLHttpRequest();
+	
+	request.addEventListener("progress", updateProgress);
+	request.addEventListener("load", transferComplete);
+	request.addEventListener("error", transferFailed);
+	request.addEventListener("abort", transferCanceled);
+	
+	request.open('GET', '../Infinite.mp3', true);
+	request.responseType = 'arraybuffer';
+
+ 	// When loaded decode the data
+	request.onload = function() {
+		
+		$("#title").html("Infinite");
+		$("#album").html("Infinite");
+		$("#artist").html("Valence");
+		$("#title, #artist, #album").css("visibility", "visible");
+		
+		// decode the data
+		context.decodeAudioData(request.response, function(buffer) {
 		// when the audio is decoded play the sound
 		sourceNode.buffer = buffer;
 		sourceNode.start(0);
@@ -124,11 +183,31 @@ function handleFiles(files) {
 		}, function(e) {
 			console.log(e);
 		});
+	};
+	request.send();
+}
 
-        //loader.play("audio");
-        
-        $("#freq, body").addClass("animateHue");
-    });
+// progress on transfers from the server to the client (downloads)
+function updateProgress (oEvent) {
+  if (oEvent.lengthComputable) {
+    var percentComplete = oEvent.loaded / oEvent.total;
+	console.log("Loading music file... " + Math.floor(percentComplete * 100) + "%");
+  } else {
+    // Unable to compute progress information since the total size is unknown
+	  console.log("Unable to compute progress info.");
+  }
+}
+
+function transferComplete(evt) {
+  	console.log("The transfer is complete.");
+}
+
+function transferFailed(evt) {
+  	console.log("An error occurred while transferring the file.");
+}
+
+function transferCanceled(evt) {
+  	console.log("The transfer has been canceled by the user.");
 }
 
 function initBinCanvas () {
@@ -196,11 +275,12 @@ function reset () {
 function updateVisualization () {
         
 	// get the average, bincount is fftsize / 2
-	var array = new Uint8Array(analyser.frequencyBinCount);
-	analyser.getByteFrequencyData(array);
+	if (fileChosen) {
+		var array = new Uint8Array(analyser.frequencyBinCount);
+		analyser.getByteFrequencyData(array);
 
-	drawBars(array);
-        
+		drawBars(array);
+	}
        // setTextAnimation(array);
     
 

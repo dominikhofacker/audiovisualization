@@ -66,13 +66,17 @@ body {
 	margin-bottom: 0;
 }
 
-input {
-    margin-bottom: 10px;
+input, button {
+	position: absolute;
+	top: 10px;
+	left: 5px;
     display: block;
-    background: none;
-    position: absolute;
     z-index: 999;
     
+}
+
+button {
+	top: 40px;
 }
 
 html, body {

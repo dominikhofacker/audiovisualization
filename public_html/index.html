@@ -1,7 +1,6 @@
 <!DOCTYPE html>
 <!--
 Audiovisualization using the html canvas element.
-Please note: this is an offline-only version. For this version to be used online you need an XMLHttpRequest to load the music file!
 ©2017, Dominik Hofacker
 https://www.behance.net/dominikhofacker
 Please consider supporting this project on behance:
@@ -24,7 +23,8 @@ https://www.behance.net/gallery/49260123/Web-Audio-Visualization
         <script src="src/audiovisualisierung.js"></script>
     </head>
     <body>		   
-        <input type="file" id="input" onchange="handleFiles(this.files)"/> 
+       <input type="file" id="input" onchange="handleFiles(this.files)"/>
+       <button type="button" onClick="playSample()">Play Sample File</button>
         <div id="song_info_wrapper">
         	<div id="artist">Artist</div>
 			<div id="title">Titel</div>
