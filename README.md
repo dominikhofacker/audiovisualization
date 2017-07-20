@@ -1,8 +1,6 @@
 # Web Audio Visualization
 
-![](https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/46ce0a49260123.58b1731a3831a.png)
-![](https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/57465549260123.58b1731a37e84.png)
-![](https://mir-s3-cdn-cf.behance.net/project_modules/max_3840/3e46fc49260123.58b1731a3776d.png)
+![](https://mir-cdn.behance.net/v1/rendition/project_modules/1400/eb591949260123.596f8b760ab20.png)
 
 # Check it out in action!: [http://dominikhofacker.me/audiovisualization/](http://dominikhofacker.me/audiovisualization/) 
 
