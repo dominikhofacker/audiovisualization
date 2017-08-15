@@ -179,6 +179,7 @@ function playSample() {
 		// when the audio is decoded play the sound
 		sourceNode.buffer = buffer;
 		sourceNode.start(0);
+		$("#freq, body").addClass("animateHue");
 		//on error
 		}, function(e) {
 			console.log(e);
