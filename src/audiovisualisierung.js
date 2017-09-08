@@ -305,20 +305,43 @@ function drawBars (array) {
 	//space between bins
 	var space = 3;
         
-        ctx.save();
-        
-        
-        ctx.globalCompositeOperation='source-over';
-        
-        //console.log(maxBinCount); //--> 1024
-        ctx.scale(0.5, 0.5);
-        ctx.translate(window.innerWidth, window.innerHeight);
-        ctx.fillStyle = "#fff";
-        
-        var bass = Math.floor(array[1]); //1Hz Frequenz 
-        var radius = -(bass * 0.25 + 450);
-		       
+	ctx.save();
+
+
+	ctx.globalCompositeOperation='source-over';
+
+	//console.log(maxBinCount); //--> 1024
+	ctx.scale(0.5, 0.5);
+	ctx.translate(window.innerWidth, window.innerHeight);
+	ctx.fillStyle = "#fff";
+
+	var bass = Math.floor(array[1]); //1Hz Frequenz 
+	var radius = 0.45 * $(window).width() <= 450 ? -(bass * 0.25 + 0.45 * $(window).width()) : -(bass * 0.25 + 450);
+
+	var bar_length_factor = 1;
+	if ($(window).width() >= 785) {
+		bar_length_factor = 1.0;
+	}
+	else if ($(window).width() < 785) {
+		bar_length_factor = 1.5;
+	}
+	else if ($(window).width() < 500) {
+		bar_length_factor = 20.0;
+	}
+	console.log($(window).width());
 	//go over each bin
+	for ( var i = 0; i < maxBinCount; i++ ){
+		
+		var value = array[i];
+		if (value >= threshold) {			
+			//draw bin
+			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
+                        //ctx.fillRect(i * space, c.height, 2, -value);
+                        ctx.fillRect(0, radius, 3, -value / bar_length_factor);
+                        ctx.rotate((180 / 128) * Math.PI/180);   
+		}
+	}  
+        
 	for ( var i = 0; i < maxBinCount; i++ ){
 
 		var value = array[i];
@@ -326,58 +349,26 @@ function drawBars (array) {
 
 			//draw bin
 			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
-                        //ctx.fillRect(i * space, c.height, 2, -value);
-                        ctx.fillRect(0, radius, 3, -value);
-                        ctx.rotate((180 / 128) * Math.PI/180);
-                  
+						//ctx.fillRect(i * space, c.height, 2, -value);
+						ctx.rotate(-(180 / 128) * Math.PI/180);
+						ctx.fillRect(0, radius, 3, -value / bar_length_factor);
 		}
-	}   
-       
-//        for ( var i = 0; i < maxBinCount; i++ ){ //ÜBERFLÜSSIG
-//
-//		var value = array[i];
-//		if (value >= threshold) {				
-//
-//			//draw bin
-//			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
-//                        //ctx.fillRect(i * space, c.height, 2, -value);
-//                        ctx.rotate(-(180 / 128) * Math.PI/180);
-//                        ctx.fillRect(0, radius, 3, -value);
-//                        
-//                  
-//		}
-//	} 
+	} 
         
-        for ( var i = 0; i < maxBinCount; i++ ){
+	for ( var i = 0; i < maxBinCount; i++ ){
 
 		var value = array[i];
 		if (value >= threshold) {				
 
 			//draw bin
 			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
-                        //ctx.fillRect(i * space, c.height, 2, -value);
-                        ctx.rotate(-(180 / 128) * Math.PI/180);
-                        ctx.fillRect(0, radius, 3, -value);
-                        
-                  
+						//ctx.fillRect(i * space, c.height, 2, -value);
+						ctx.rotate((180 / 128) * Math.PI/180);
+						ctx.fillRect(0, radius, 3, -value / bar_length_factor);
 		}
 	} 
-        
-        for ( var i = 0; i < maxBinCount; i++ ){
-
-		var value = array[i];
-		if (value >= threshold) {				
-
-			//draw bin
-			//ctx.fillRect(0 + i * space, c.height - value, 2 , c.height);
-                        //ctx.fillRect(i * space, c.height, 2, -value);
-                        ctx.rotate((180 / 128) * Math.PI/180);
-                        ctx.fillRect(0, radius, 3, -value);
-                        
-                  
-		}
-	} 
-        ctx.restore();
+    
+	ctx.restore();
 }
 
 //function setTextAnimation(array)
