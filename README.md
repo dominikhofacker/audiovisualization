@@ -1,5 +1,7 @@
 # Web Audio Visualization
 
+Please be aware, this project uses an XMLHttpRequest() to load the music files. Therefore, the index.html file necessarily needs to run on a server, either locally or online.
+
 ![](https://mir-cdn.behance.net/v1/rendition/project_modules/1400/eb591949260123.596f8b760ab20.png)
 
 # Check it out in action!: [http://dominikhofacker.me/audiovisualization/](http://dominikhofacker.me/audiovisualization/) 
