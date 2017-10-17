@@ -149,6 +149,7 @@ function handleFiles(files) {
 	};
 	request.send();
 	
+	$("button, input").prop("disabled",true);
 }
 
 function playSample() {
@@ -186,6 +187,8 @@ function playSample() {
 		});
 	};
 	request.send();
+	
+	$("button, input").prop("disabled",true);
 }
 
 // progress on transfers from the server to the client (downloads)
@@ -204,12 +207,13 @@ function updateProgress (oEvent) {
 function transferComplete(evt) {
   	console.log("The transfer is complete.");
 	$("#loading").html("");
-	$("button, input").prop("disabled",false);
+	//$("button, input").prop("disabled",false);
 }
 
 function transferFailed(evt) {
   	console.log("An error occurred while transferring the file.");
 	$("#loading").html("Loading failed.");
+	$("button, input").prop("disabled", false);
 }
 
 function transferCanceled(evt) {
