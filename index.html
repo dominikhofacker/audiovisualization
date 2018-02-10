@@ -23,13 +23,14 @@ https://www.behance.net/gallery/49260123/Web-Audio-Visualization
         <script src="src/audiovisualisierung.js"></script>
     </head>
     <body>		   
-       <input type="file" id="input" onchange="handleFiles(this.files)"/>
-       <button type="button" onClick="playSample()">Play Sample File</button>
-       <span id="loading"></span>
+       	<input type="file" id="input" onchange="handleFiles(this.files)"/>
+       	<button id="playSampleButton" type="button" onClick="playSample()">Play Sample File</button>
+		<button id="useMicButton" type="button" onClick="useMic()">Use Microphone</button>
+       	<span id="loading"></span>
         <div id="song_info_wrapper">
-        	<div id="artist">Artist</div>
-			<div id="title">Titel</div>
-			<div id="album">Album</div>
+        	<div id="artist">Unknown Artist</div>
+			<div id="title">Unknown Titel</div>
+			<div id="album">Unknown Album</div>
 		</div>
         <canvas id="freq" width="1024" height="525"></canvas>
     </body>

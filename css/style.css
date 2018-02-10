@@ -55,7 +55,7 @@ body {
 #song_info_wrapper {
 	position: absolute;
 	width: 100%;
-	text-align: center;
+	text-align: center; 
 }
 
 #title {
@@ -80,8 +80,12 @@ input, button, #loading {
     
 }
 
-button {
+#playSampleButton {
 	top: 40px;
+}
+
+#useMicButton {
+	top: 70px;
 }
 
 #loading {
@@ -119,5 +123,9 @@ html, body {
 	#artist, #album {
 		font-weight: 300;
 		font-size: 4.5vw;
+	}
+	
+	#title {
+		
 	}
 }

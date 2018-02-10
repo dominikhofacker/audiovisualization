@@ -11,12 +11,13 @@ var analyser = null;
 var c = null;
 var cDraw = null;
 var ctx = null;
-var micropone = null;
+var microphone = null;
 var ctxDraw = null;
 
 var loader;
 var filename;
 var fileChosen = false;
+var hasSetupUserMedia = false;
 
 //handle different prefix of the audio context
 var AudioContext = AudioContext || webkitAudioContext;
@@ -29,17 +30,7 @@ if (!window.requestAnimationFrame)
 
 $(function () {
 		"use strict";
-		var containerHeight = $("#song_info_wrapper").height();
-		var topVal = $(window).height() / 2 - containerHeight / 2; 
-		$("#song_info_wrapper").css("top", topVal);
-		console.log(topVal);
-		//handle different types navigator objects of different browsers
-		navigator.getUserMedia = navigator.getUserMedia || navigator.webkitGetUserMedia ||
-	            navigator.mozGetUserMedia || navigator.msGetUserMedia;
-	    //eigene Init
 	    loader = new BufferLoader();
-            //loader.visualize = visualize;
-            //init canvas
 	    initBinCanvas();	
 });
 
@@ -72,42 +63,25 @@ function handleFiles(files) {
 //                    else {
 //                        $("#title").html(tags.title);
 //                    }
-			if (tags.title.length > 14) {
-				var finalTitle;
-				var checkTitle = tags.title.toLowerCase();
-				var cutIndex = checkTitle.indexOf("feat.");
-				//console.log(tags.title.toLowerCase());
-				var cutIndex2 = checkTitle.indexOf("(");
-				//console.log(cutIndex2);
+			if (tags.title.length > 14 && tags.title.length <= 17) {
 
-				var enthaeltFeat = cutIndex !== -1;
-				var enthaeltKlammer = cutIndex2 !== -1;
-
-				//console.log(enthaeltKlammer);
-
-				if (enthaeltFeat && !enthaeltKlammer) {
-					finalTitle = tags.title.substring(0, cutIndex);
-				}
-				else if (enthaeltKlammer && !enthaeltFeat) {
-					finalTitle = tags.title.substring(0, cutIndex2);
-				}
-				else if (enthaeltFeat && enthaeltKlammer && cutIndex < cutIndex2) {
-					finalTitle = tags.title.substring(0, cutIndex);
-				}
-				else if (enthaeltFeat && enthaeltKlammer && cutIndex2 < cutIndex) {
-					finalTitle = tags.title.substring(0, cutIndex2);
-				}
-				else { //!Klammer !Feat
-					var newTitle = tags.title.substring(0,14);
-					newTitle += "...";
-					finalTitle = newTitle;
-				}
-
-				$("#title").html(finalTitle);
+				$("#title").css("font-size", "7.5vh");
+				
 			}
-			else {
-				$("#title").html(tags.title);
+			if (tags.title.length > 17 && tags.title.length <= 20) {
+				
+				$("#title").css("font-size", "6.5vh");
 			}
+			
+			if (tags.title.length > 20) {
+				
+				$("#title").css("font-size", "5vh");
+				
+			}
+			
+			$("#title").html(tags.title);
+			
+			onWindowResize();
 
 			$("#title").css("visibility", "visible");
 
@@ -173,6 +147,7 @@ function playSample() {
 		$("#title").html("Infinite");
 		$("#album").html("Infinite");
 		$("#artist").html("Valence");
+		onWindowResize();
 		$("#title, #artist, #album").css("visibility", "visible");
 		
 		// decode the data
@@ -189,6 +164,42 @@ function playSample() {
 	request.send();
 	
 	$("button, input").prop("disabled",true);
+}
+
+function useMic() 	
+{
+	"use strict";
+	if (!navigator.mediaDevices.getUserMedia) {
+		alert("Your browser does not support microphone input!");
+		console.log('Your browser does not support microphone input!');
+		return;
+ 	}
+	
+	navigator.mediaDevices.getUserMedia({audio: true, video: false})
+	.then(function(stream) {
+		hasSetupUserMedia = true;
+	  	//convert audio stream to mediaStreamSource (node)
+		microphone = context.createMediaStreamSource(stream);
+		//create analyser
+		if (analyser === null) analyser = context.createAnalyser();
+		//connect microphone to analyser
+		microphone.connect(analyser);
+		//start updating
+		rafID = window.requestAnimationFrame( updateVisualization );
+		
+		$("#title").html("Mic");
+		$("#album").html("Input");
+		$("#artist").html("Using");
+		onWindowResize();
+		$("#title, #artist, #album").css("visibility", "visible");
+		$("#freq, body").addClass("animateHue");
+	})
+	.catch(function(err) {
+	  /* handle the error */
+		alert("Capturing microphone data failed! (currently only supported in Chrome & Firefox)");
+		console.log('capturing microphone data failed!');
+		console.log(err);
+	});
 }
 
 // progress on transfers from the server to the client (downloads)
@@ -224,6 +235,7 @@ function transferCanceled(evt) {
 function initBinCanvas () {
 
 	//add new canvas
+	"use strict";
 	c = document.getElementById("freq");
 	c.width = window.innerWidth;
         c.height = window.innerHeight;
@@ -255,6 +267,11 @@ function onWindowResize()
 	var topVal = $(window).height() / 2 - containerHeight / 2; 
 	$("#song_info_wrapper").css("top", topVal);
 	console.log(topVal);
+	
+	if($(window).width() <= 500) {
+		//TODO: not yet working
+		$("#title").css("font-size", "40px");
+	}
 }
 
 var audioBuffer;
@@ -286,7 +303,7 @@ function reset () {
 function updateVisualization () {
         
 	// get the average, bincount is fftsize / 2
-	if (fileChosen) {
+	if (fileChosen || hasSetupUserMedia) {
 		var array = new Uint8Array(analyser.frequencyBinCount);
 		analyser.getByteFrequencyData(array);
 
