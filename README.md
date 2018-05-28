@@ -1,5 +1,7 @@
 # Web Audio Visualization
 
+[![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W44KZGZL2LFLL)
+
 Please be aware, this project uses an XMLHttpRequest() to load the music files. Therefore, the index.html file necessarily needs to run on a server, either locally or online.
 
 ![](https://mir-cdn.behance.net/v1/rendition/project_modules/1400/eb591949260123.596f8b760ab20.png)
