@@ -7,7 +7,7 @@ _For more information on how to run a local server, e.g. with node.js, visit the
 
 ![](https://mir-cdn.behance.net/v1/rendition/project_modules/1400/eb591949260123.596f8b760ab20.png)
 
-# Check it out in action!: [https://dominik-hofacker.com/audiovisualization/](http://dominikhofacker.me/audiovisualization/) 
+# Check it out in action!: [https://dominik-hofacker.com/audiovisualization/](https://dominik-hofacker.com/audiovisualization/) 
 
 ## Check out the project on behance to find out more: [https://www.behance.net/gallery/49260123/Web-Audio-Visualization](https://www.behance.net/gallery/49260123/Web-Audio-Visualization "More info on the project")
 
