@@ -2,6 +2,8 @@
 
 [![paypal](https://www.paypalobjects.com/en_US/i/btn/btn_donateCC_LG.gif)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=W44KZGZL2LFLL)
 
+Follow me on Twitter for future updates! [https://twitter.com/brandfamdom](https://twitter.com/brandfamdom)
+
 Please be aware, this project uses an XMLHttpRequest() to load the music files. Therefore, the index.html file necessarily needs to run on a server, either locally or online.  
 _For more information on how to run a local server, e.g. with node.js, visit the following [link](http://jasonwatmore.com/post/2016/06/22/nodejs-setup-simple-http-server-local-web-server)._
 
